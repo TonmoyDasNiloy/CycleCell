@@ -1,0 +1,9 @@
+{
+  "name": "cyclecell-static-prototype",
+  "private": true,
+  "version": "0.3.0",
+  "description": "CycleCell public TrustTrack prototype, static GitHub Pages build",
+  "scripts": {
+    "test": "node --test tests/core.test.js"
+  }
+}

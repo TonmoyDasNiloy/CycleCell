@@ -1,50 +1,86 @@
-# CycleCell
+# CycleCell — TrustTrack public-test prototype
 
-**Don’t dump it. Cycle it.**
+**Don't dump it. Cycle it.** CycleCell is an undergraduate project (P27) exploring transparent electronics buyback, data-security planning, and responsible e-waste recovery in Bangladesh.
 
-CycleCell is a prototype website for a trusted e-waste service. People sell broken phones and laptops for a fixed price, the data is erased with proof, and recovered parts and materials are sold in bulk to buyers. Every step is tracked. Project ID: P27.
+This repository is the **GitHub Pages-compatible prototype**, not a live buyback company. Nothing in this website performs physical collection, payments, real device sanitization, independently verifiable custody, or recycling.
 
-## What is in this repository
+## What's new
 
-| Path | What it is |
-|---|---|
-| `index.html` | The website: landing page, Sell, Buyer, and Admin pages. A single self-contained file. |
-| `prototype/seller-staff-buyer-demo.html` | The earlier single-file clickable prototype with Seller, Staff, and Buyer tabs. |
-| `docs/Prototesting_Plan_CycleCell.docx` | The prototype testing plan. |
-| `assets/logo.png` | The CycleCell logo. |
-| `video/CycleCell_Video.mp4` | The 72-second animated video (problem, solution, prototype) with a male voiceover. |
+- **Seller:** interactive BDT estimates by device category, age, condition and water damage; transparent illustrative rules (not machine learning); safety stop for swollen batteries; storage-type selection; privacy-first vs reuse-first; local demo tracking ID. A pickup/drop-off preference is not a booking.
+- **TrustTrack:** device-specific proposed handling method (phone, SSD, HDD or inaccessible storage); clear local timeline with **simulation** labels; sample printable **Device Security & Recovery Report** that never claims a wipe happened.
+- **Buyer:** sample component/material inventory, quantities and local sample bulk orders.
+- **Demo desk:** create sample requests, simulate processing steps, add/remove sample inventory, export local JSON and reset local data. This is intentionally *not* a protected admin portal.
+- **Feedback:** optional anonymous four-question study with per-browser local storage and manual CSV export; no remote collection.
+- **Mobile layout:** responsive views and keyboard-friendly forms; no frontend build or paid service required.
 
-## The website
+## Start locally
 
-- **Landing page:** the problem (figures from the UN Global E-waste Monitor 2024) and the solution.
-- **Sell:** enter a name, pick a device and its condition, see a fixed price (semi-broken or fully broken), and send the request to the admin. Track the sale by name or device ID. After approval, the full timeline and the data-erase certificate show automatically.
-- **Buyer:** browse lots of tested phone and laptop parts and recovered materials, request a bulk order, and track it by company name.
-- **Admin:** approve or reject sell requests and buyer orders, move devices and orders through each step, and manage stock lots.
-- Every status change is saved in a hash-chained log, so edits to history can be detected.
+You can double-click `index.html` in Windows, or use a static server if your browser restricts `file://` behavior:
 
-## Run it locally
+```bash
+python -m http.server 8000
+```
 
-Open `index.html` in a browser. No build step and no server are needed.
+Then open `http://localhost:8000`.
 
-## Host it on GitHub Pages
+Run the calculation/sanitization-planning unit tests if Node.js is available:
 
-1. Create a new repository on GitHub and upload everything in this folder.
-2. Go to **Settings > Pages**.
-3. Under **Build and deployment**, choose **Deploy from a branch**, pick the `main` branch and the `/ (root)` folder, and save.
-4. After a minute, the site is live at `https://YOUR-USERNAME.github.io/YOUR-REPOSITORY/`.
+```bash
+node --test tests/core.test.js
+# or: npm test
+```
 
-## Important limits of this static version
+**No npm install is required.** `package.json` provides only an optional test shortcut.
 
-- **No shared database.** On GitHub Pages the site runs in demo mode: all data is saved only in each visitor’s own browser. A seller and an admin on different devices will not see each other’s data.
-- **The Admin page is open to everyone** in this mode, because there is no login. Do not use it with real customers.
-- Prices, device tags, and certificates are samples, not legal documents.
-- Details typed into the forms stay in the browser. Do not enter real personal information.
+## GitHub Pages
 
-## Making it real
+1. Push the repository to GitHub.
+2. Under **Settings → Pages → Build and deployment**, choose **Deploy from a branch**, select `main`, `/ (root)`.
+3. Save. The root `index.html` is the entry point; `.nojekyll` is included.
+4. The URLs and assets use relative paths and work under a `/<repo>/` project site.
 
-To run this for real, replace the browser storage with a hosted backend (for example Supabase or Firebase), add an admin login, and keep customer contact details private. The data functions in `index.html` (`put`, `init`, and the `devs` and `ords` helpers) are the places to change.
+This is a static site, and **GitHub Pages cannot run backend server logic**. The current “Sell”, “Admin”, “Buyer” and “Feedback” features run inside **each individual visitor's browser** using `localStorage`; records **do not synchronize** with the team or other visitors.
 
-## Data sources
+## Important limitations / safe-use notice
 
-- UN Global E-waste Monitor 2024 (e-waste amounts and recovered value). Check for newer editions.
-- UN University study on gold recovery from e-waste (an older estimate).
+- **No real quote:** all BDT amounts are demonstration assumptions and must be calibrated against local market data before use in an actual service. The pricing model is **not ML**.
+- **No real customer request:** filling a form does not reach an employee, create a booking, send an email, or reserve inventory.
+- **No actual sanitization:** this is a guided planning workflow, **not erasure software**. Status events on the open demo desk are simulations, not evidence of data destruction. Even a printable report remains explicitly marked `DEMO ONLY`.
+- **No public admin security:** the demo desk is intentionally open, and never handles real customer files, serial numbers, IMEIs, locations, photos or contact details.
+- **No shared tracking:** an ID created in one visitor's browser cannot be looked up from another device. Local data can be changed or cleared by the visitor and is **not** a tamper-evident record.
+- **No live buyer stock:** sample parts/material quantities and prices are fictional; ordering creates no transaction.
+- **No automatic research data collection:** each tester must manually export their anonymous feedback CSV if they agree to share it. For real research, use appropriate consent, secure collection, and institutional approval as needed.
+- **No certification:** NIST SP 800-88 Rev. 2 is guidance for media sanitization programs; this project does not claim to be “NIST-certified,” and it is not independently audited.
+
+## Quick walkthrough
+
+1. Open **Sell a device**, select laptop → business-class → damaged → SSD → privacy first. The site shows a sample BDT quote and proposed SSD-specific handling.
+2. Confirm demo ownership and create a local tracking ID; copy it.
+3. Go to **TrustTrack** and look up the ID. Only the quote stage is recorded initially.
+4. Go to **Demo desk** to advance through simulated intake, handover, storage assessment, security handling, and recovery routing.
+5. Open the sample report, which displays the fields a real verified workflow would require but **does not present fake proof**.
+6. Browse **Marketplace** and submit a local sample bulk order.
+7. Answer the **Feedback** questions and export the CSV (which remains on the test machine until someone shares it).
+
+## Files
+
+| Path | Role |
+| --- | --- |
+| `index.html` | Responsive single-page interface |
+| `assets/site.css` | Accessible styles and print-specific layout |
+| `assets/core.js` | Pure quote, sanitization plan and safety logic |
+| `assets/app.js` | Local demo flows and interactions |
+| `tests/core.test.js` | Zero-dependency Node unit tests |
+| `docs/TrustTrack_MVP_Roadmap.md` | Requirements for evolving to a real service |
+| `docs/PROTOTYPE_TEST_PLAN.md` | Manual QA and research/validation checklist |
+| `UPDATE_INSTRUCTIONS.md` | How to overlay this upgrade on the original repo |
+
+The original repository also contains `prototype/`, `video/`, `docs/Prototesting_Plan_CycleCell.docx` and `assets/logo.png`; those are **not deleted by the overlay package**. Keep them in your existing checkout if you wish to retain the original project materials.
+
+## Technical and research references
+
+- [ITU — Global E-waste Monitor 2024](https://www.itu.int/en/ITU-D/Environment/Pages/Publications/The-Global-E-waste-Monitor-2024.aspx) (62 Mt generated in 2022; 22.3% documented formally collected and recycled).
+- [NIST SP 800-88 Rev. 2 — Guidelines for Media Sanitization](https://csrc.nist.gov/pubs/sp/800/88/r2/final) (2025).
+- [GitHub Pages Documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages).
+
+For any future production deployment, a securely authenticated backend and independent physical operating procedures are essential. See `docs/TrustTrack_MVP_Roadmap.md`.
